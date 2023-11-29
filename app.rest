@@ -1,0 +1,23 @@
+###
+
+GET http://localhost:3000/student
+
+###
+
+GET http://localhost:3000/student?name=John%20Doe
+
+
+###
+
+GET http://localhost:3000/student/1234567891
+
+
+###
+
+POST http://localhost:3000/student
+Content-Type: application/json
+
+{
+    "name": "John Doe 1",
+    "_id": "1234567891"
+}
