@@ -30,10 +30,10 @@ const postStudent = async (req, res) => {
   const student = new Student(req.body);
   try {
     await student.save();
-    res.send("OK");
+    res.status(201).send("OK");
   } catch (err) {
     console.log(err);
-    res.send("fail: " + err.message);
+    res.status(406).send("fail: " + err.message);
   }
 };
 
