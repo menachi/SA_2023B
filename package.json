@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "tsc && jest --detectOpenHandles --forceExit",
+    "test": "tsc && jest --detectOpenHandles --forceExit ./src/tests/student.test.ts",
     "start": "tsc && node ./dist/src/server.js",
     "dev": "nodemon ./src/server.ts"
   },

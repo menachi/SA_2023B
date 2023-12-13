@@ -9,6 +9,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const student_route_1 = __importDefault(require("./routes/student_route"));
+const student_post_route_1 = __importDefault(require("./routes/student_post_route"));
 const initApp = () => {
     const promise = new Promise((resolve) => {
         const db = mongoose_1.default.connection;
@@ -20,6 +21,7 @@ const initApp = () => {
             app.use(body_parser_1.default.json());
             app.use(body_parser_1.default.urlencoded({ extended: true }));
             app.use("/student", student_route_1.default);
+            app.use("/studentpost", student_post_route_1.default);
             resolve(app);
         });
     });
