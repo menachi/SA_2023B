@@ -29,7 +29,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const salt = yield bcrypt_1.default.genSalt(10);
         const encryptedPassword = yield bcrypt_1.default.hash(password, salt);
         const rs2 = yield user_model_1.default.create({ 'email': email, 'password': encryptedPassword });
-        return res.status(201).send(rs2);
+        return res.status(201).send({ '_id': rs2._id });
     }
     catch (err) {
         return res.status(400).send("error missing email or password");
