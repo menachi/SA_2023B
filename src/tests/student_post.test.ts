@@ -2,24 +2,18 @@ import { Express } from "express";
 import request from "supertest";
 import initApp from "../app";
 import mongoose from "mongoose";
-// import StudentPost from "../models/student_post_model";
+import StudentPost, { IStudentPost } from "../models/student_post_model";
 
 let app: Express;
 beforeAll(async () => {
   app = await initApp();
   console.log("beforeAll");
-  // await Student.deleteMany();
+  await StudentPost.deleteMany();
 });
 
 afterAll(async () => {
   await mongoose.connection.close();
 });
-
-interface IStudentPost {
-  title: string;
-  message: string;
-  owner: string;
-}
 
 const post1: IStudentPost = {
   title: "title1",

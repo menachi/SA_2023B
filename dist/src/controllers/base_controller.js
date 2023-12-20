@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseConstroller = void 0;
 class BaseConstroller {
     constructor(model) {
         this.model = model;
@@ -63,5 +64,9 @@ class BaseConstroller {
         res.send("delete student by id: " + req.params.id);
     }
 }
-exports.default = BaseConstroller;
+exports.BaseConstroller = BaseConstroller;
+const createController = (model) => {
+    return new BaseConstroller(model);
+};
+exports.default = createController;
 //# sourceMappingURL=base_controller.js.map

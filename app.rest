@@ -21,3 +21,23 @@ Content-Type: application/json
     "name": "John Doe 1",
     "_id": "1234567891"
 }
+
+###
+
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "test1@test.com",
+    "password": "1234567890"
+}
+
+###
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "testUser@test.com",
+    "password": "1234567890"
+}

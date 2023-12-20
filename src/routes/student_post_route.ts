@@ -1,24 +1,15 @@
 import express from "express";
 const router = express.Router();
+import studentPostController from "../controllers/student_post_controller";
 
-router.get("/", (req, res) => {
-    res.send("Hello World!");
-});
+router.get("/", studentPostController.get.bind(studentPostController));
 
-router.get("/:id", (req, res) => {
-    res.send("Hello World!");
-});
+router.get("/:id", studentPostController.getById.bind(studentPostController));
 
-router.post("/", (req, res) => {
-    res.send("Hello World!");
-});
+router.post("/", studentPostController.post.bind(studentPostController));
 
-router.put("/:id", (req, res) => {
-    res.send("Hello World!");
-});
+router.put("/:id", studentPostController.putById.bind(studentPostController));
 
-router.delete("/:id", (req, res) => {
-    res.send("Hello World!");
-});
+router.delete("/:id", studentPostController.deleteById.bind(studentPostController));
 
 export default router;

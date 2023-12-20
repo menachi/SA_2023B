@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import studentRoute from "./routes/student_route";
 import studentPostRoute from "./routes/student_post_route";
+import authRoute from "./routes/auth_route";
 
 const initApp = (): Promise<Express> => {
   const promise = new Promise<Express>((resolve) => {
@@ -18,6 +19,7 @@ const initApp = (): Promise<Express> => {
       app.use(bodyParser.urlencoded({ extended: true }));
       app.use("/student", studentRoute);
       app.use("/studentpost", studentPostRoute);
+      app.use("/auth", authRoute);
       resolve(app);
     });
   });
