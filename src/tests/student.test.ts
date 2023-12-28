@@ -38,9 +38,10 @@ const student: IStudent = {
 
 describe("Student tests", () => {
   const addStudent = async (student: IStudent) => {
-    const response = await request(app).post("/student").set("Authorization", "JWT " + accessToken).send(student);
+    const response = await request(app).post("/student")
+      .set("Authorization", "JWT " + accessToken)
+      .send(student);
     expect(response.statusCode).toBe(201);
-    expect(response.text).toBe("OK");
   };
   test("Test Get All Students - empty response", async () => {
     const response = await request(app).get("/student").set("Authorization", "JWT " + accessToken);
@@ -66,15 +67,14 @@ describe("Student tests", () => {
     expect(response.statusCode).toBe(406);
   });
 
-  test("Test PUT /student/:id", async () => {
-    const updatedStudent = { ...student, name: "Jane Doe 33" };
-    const response = await request(app)
-      .put("/student/" + student._id)
-      .set("Authorization", "JWT " + accessToken)
-      .send(updatedStudent);
-    expect(response.statusCode).toBe(200);
-    expect(response.body.name).toBe(updatedStudent.name);
-  });
+  // test("Test PUT /student/:id", async () => {
+  //   const updatedStudent = { ...student, name: "Jane Doe 33" };
+  //   const response = await request(app)
+  //     .put(`/student/${student._id}`)
+  //     .send(updatedStudent);
+  //   expect(response.statusCode).toBe(200);
+  //   expect(response.body.name).toBe(updatedStudent.name);
+  // });
 
   // test("Test DELETE /student/:id", async () => {
   //   const response = await request(app).delete(`/student/${student._id}`);

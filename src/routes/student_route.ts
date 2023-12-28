@@ -9,7 +9,7 @@ router.get("/:id", authMiddleware, studentController.getById.bind(studentControl
 
 router.post("/", authMiddleware, studentController.post.bind(studentController));
 
-router.put("/:id", studentController.putById.bind(studentController));
+router.put("/:id", authMiddleware, studentController.putById.bind(studentController));
 
 router.delete("/:id", authMiddleware, studentController.deleteById.bind(studentController));
 

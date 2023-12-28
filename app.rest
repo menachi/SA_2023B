@@ -24,15 +24,6 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:3000/student/1234567890
-Content-Type: application/json
-
-{
-    "name": "John Doe 1",
-    "_id": "1234567890"
-}
-###
-
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 

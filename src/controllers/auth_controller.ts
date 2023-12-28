@@ -17,7 +17,7 @@ const register = async (req: Request, res: Response) => {
         const salt = await bcrypt.genSalt(10);
         const encryptedPassword = await bcrypt.hash(password, salt);
         const rs2 = await User.create({ 'email': email, 'password': encryptedPassword });
-        return res.status(201).send({ '_id': rs2._id });
+        return res.status(201).send(rs2);
     } catch (err) {
         return res.status(400).send("error missing email or password");
     }

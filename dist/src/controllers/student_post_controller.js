@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const student_post_model_1 = __importDefault(require("../models/student_post_model"));
 const base_controller_1 = require("./base_controller");
-class StudentPostController extends base_controller_1.BaseConstroller {
+class StudentPostController extends base_controller_1.BaseController {
     constructor() {
         super(student_post_model_1.default);
     }
@@ -23,8 +23,10 @@ class StudentPostController extends base_controller_1.BaseConstroller {
             post: { get: () => super.post }
         });
         return __awaiter(this, void 0, void 0, function* () {
-            req.body.owner = req.user._id;
-            return _super.post.call(this, req, res);
+            console.log("postStudent:" + req.body);
+            const _id = req.user._id;
+            req.body.owner = _id;
+            _super.post.call(this, req, res);
         });
     }
 }

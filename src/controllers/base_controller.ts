@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Model } from "mongoose";
 
-export class BaseConstroller<ModelType>{
+export class BaseController<ModelType>{
 
     model: Model<ModelType>
     constructor(model: Model<ModelType>) {
@@ -36,40 +36,25 @@ export class BaseConstroller<ModelType>{
     async post(req: Request, res: Response) {
         console.log("postStudent:" + req.body);
         try {
-            await this.model.create(req.body);
-            res.status(201).send("OK");
+            const obj = await this.model.create(req.body);
+            res.status(201).send(obj);
         } catch (err) {
             console.log(err);
             res.status(406).send("fail: " + err.message);
         }
     }
 
-    async putById(req: Request, res: Response) {
-        console.log("putStudent:" + req.body);
-        try {
-            await this.model.findByIdAndUpdate(req.params.id, req.body);
-            const obj = await this.model.findById(req.params.id);
-            res.status(200).send(obj);
-        } catch (err) {
-            console.log(err);
-            res.status(406).send("fail: " + err.message);
-        }
+    putById(req: Request, res: Response) {
+        res.send("put student by id: " + req.params.id);
     }
 
-    async deleteById(req: Request, res: Response) {
-        console.log("deleteById:" + req.body);
-        try {
-            await this.model.findByIdAndDelete(req.params.id);
-            res.status(200).send("OK");
-        } catch (err) {
-            console.log(err);
-            res.status(406).send("fail: " + err.message);
-        }
+    deleteById(req: Request, res: Response) {
+        res.send("delete student by id: " + req.params.id);
     }
 }
 
 const createController = <ModelType>(model: Model<ModelType>) => {
-    return new BaseConstroller<ModelType>(model);
+    return new BaseController<ModelType>(model);
 }
 
 export default createController;

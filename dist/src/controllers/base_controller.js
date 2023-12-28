@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseConstroller = void 0;
-class BaseConstroller {
+exports.BaseController = void 0;
+class BaseController {
     constructor(model) {
         this.model = model;
     }
@@ -48,8 +48,8 @@ class BaseConstroller {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("postStudent:" + req.body);
             try {
-                yield this.model.create(req.body);
-                res.status(201).send("OK");
+                const obj = yield this.model.create(req.body);
+                res.status(201).send(obj);
             }
             catch (err) {
                 console.log(err);
@@ -58,36 +58,15 @@ class BaseConstroller {
         });
     }
     putById(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("putStudent:" + req.body);
-            try {
-                yield this.model.findByIdAndUpdate(req.params.id, req.body);
-                const obj = yield this.model.findById(req.params.id);
-                res.status(200).send(obj);
-            }
-            catch (err) {
-                console.log(err);
-                res.status(406).send("fail: " + err.message);
-            }
-        });
+        res.send("put student by id: " + req.params.id);
     }
     deleteById(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("deleteById:" + req.body);
-            try {
-                yield this.model.findByIdAndDelete(req.params.id);
-                res.status(200).send("OK");
-            }
-            catch (err) {
-                console.log(err);
-                res.status(406).send("fail: " + err.message);
-            }
-        });
+        res.send("delete student by id: " + req.params.id);
     }
 }
-exports.BaseConstroller = BaseConstroller;
+exports.BaseController = BaseController;
 const createController = (model) => {
-    return new BaseConstroller(model);
+    return new BaseController(model);
 };
 exports.default = createController;
 //# sourceMappingURL=base_controller.js.map
