@@ -22,7 +22,7 @@ afterAll(async () => {
 
 let accessToken: string;
 let refreshToken: string;
-
+let newRefreshToken: string
 
 describe("Auth tests", () => {
   test("Test Register", async () => {
@@ -96,13 +96,26 @@ describe("Auth tests", () => {
     expect(response.body.refreshToken).toBeDefined();
 
     const newAccessToken = response.body.accessToken;
-    // const newRefreshToken = response.body.refreshToken;
+    newRefreshToken = response.body.refreshToken;
 
     const response2 = await request(app)
       .get("/student")
       .set("Authorization", "JWT " + newAccessToken);
     expect(response2.statusCode).toBe(200);
-
   });
 
+  test("Test double use of refresh token", async () => {
+    const response = await request(app)
+      .get("/auth/refresh")
+      .set("Authorization", "JWT " + refreshToken)
+      .send();
+    expect(response.statusCode).not.toBe(200);
+
+    //verify that the new token is not valid as well
+    const response1 = await request(app)
+      .get("/auth/refresh")
+      .set("Authorization", "JWT " + newRefreshToken)
+      .send();
+    expect(response1.statusCode).not.toBe(200);
+  });
 });

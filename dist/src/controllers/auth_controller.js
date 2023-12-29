@@ -50,19 +50,87 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!match) {
             return res.status(401).send("email or password incorrect");
         }
-        const token = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
-        return res.status(200).send({ 'accessToken': token });
+        const accessToken = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
+        const refreshToken = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET);
+        if (user.refreshTokens == null) {
+            user.refreshTokens = [refreshToken];
+        }
+        else {
+            user.refreshTokens.push(refreshToken);
+        }
+        yield user.save();
+        return res.status(200).send({
+            'accessToken': accessToken,
+            'refreshToken': refreshToken
+        });
     }
     catch (err) {
         return res.status(400).send("error missing email or password");
     }
 });
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(400).send("unimplemented");
+    const authHeader = req.headers['authorization'];
+    const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+    if (refreshToken == null)
+        return res.sendStatus(401);
+    jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, user) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log(err);
+        if (err)
+            return res.sendStatus(401);
+        try {
+            const userDb = yield user_model_1.default.findOne({ '_id': user._id });
+            if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
+                userDb.refreshTokens = [];
+                yield userDb.save();
+                return res.sendStatus(401);
+            }
+            else {
+                userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
+                yield userDb.save();
+                return res.sendStatus(200);
+            }
+        }
+        catch (err) {
+            res.sendStatus(401).send(err.message);
+        }
+    }));
+});
+const refresh = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const authHeader = req.headers['authorization'];
+    const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+    if (refreshToken == null)
+        return res.sendStatus(401);
+    jsonwebtoken_1.default.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, user) => __awaiter(void 0, void 0, void 0, function* () {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(401);
+        }
+        try {
+            const userDb = yield user_model_1.default.findOne({ '_id': user._id });
+            if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
+                userDb.refreshTokens = [];
+                yield userDb.save();
+                return res.sendStatus(401);
+            }
+            const accessToken = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
+            const newRefreshToken = jsonwebtoken_1.default.sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET);
+            userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
+            userDb.refreshTokens.push(newRefreshToken);
+            yield userDb.save();
+            return res.status(200).send({
+                'accessToken': accessToken,
+                'refreshToken': refreshToken
+            });
+        }
+        catch (err) {
+            res.sendStatus(401).send(err.message);
+        }
+    }));
 });
 exports.default = {
     register,
     login,
-    logout
+    logout,
+    refresh
 };
 //# sourceMappingURL=auth_controller.js.map

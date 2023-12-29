@@ -31,6 +31,7 @@ afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
 }));
 let accessToken;
 let refreshToken;
+let newRefreshToken;
 describe("Auth tests", () => {
     test("Test Register", () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield (0, supertest_1.default)(app)
@@ -92,11 +93,24 @@ describe("Auth tests", () => {
         expect(response.body.accessToken).toBeDefined();
         expect(response.body.refreshToken).toBeDefined();
         const newAccessToken = response.body.accessToken;
-        // const newRefreshToken = response.body.refreshToken;
+        newRefreshToken = response.body.refreshToken;
         const response2 = yield (0, supertest_1.default)(app)
             .get("/student")
             .set("Authorization", "JWT " + newAccessToken);
         expect(response2.statusCode).toBe(200);
+    }));
+    test("Test double use of refresh token", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(app)
+            .get("/auth/refresh")
+            .set("Authorization", "JWT " + refreshToken)
+            .send();
+        expect(response.statusCode).not.toBe(200);
+        //verify that the new token is not valid as well
+        const response1 = yield (0, supertest_1.default)(app)
+            .get("/auth/refresh")
+            .set("Authorization", "JWT " + newRefreshToken)
+            .send();
+        expect(response1.statusCode).not.toBe(200);
     }));
 });
 //# sourceMappingURL=auth.test.js.map
