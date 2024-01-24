@@ -11,6 +11,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const student_route_1 = __importDefault(require("./routes/student_route"));
 const student_post_route_1 = __importDefault(require("./routes/student_post_route"));
 const auth_route_1 = __importDefault(require("./routes/auth_route"));
+const file_route_1 = __importDefault(require("./routes/file_route"));
 const initApp = () => {
     const promise = new Promise((resolve) => {
         const db = mongoose_1.default.connection;
@@ -21,9 +22,17 @@ const initApp = () => {
             const app = (0, express_1.default)();
             app.use(body_parser_1.default.json());
             app.use(body_parser_1.default.urlencoded({ extended: true }));
+            app.use((req, res, next) => {
+                res.header("Access-Control-Allow-Origin", "*");
+                res.header("Access-Control-Allow-Methods", "*");
+                res.header("Access-Control-Allow-Headers", "*");
+                next();
+            });
             app.use("/student", student_route_1.default);
             app.use("/studentpost", student_post_route_1.default);
             app.use("/auth", auth_route_1.default);
+            app.use("/file", file_route_1.default);
+            app.use("/public", express_1.default.static("public"));
             resolve(app);
         });
     });

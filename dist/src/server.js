@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
-// import https from 'https';
+const https_1 = __importDefault(require("https"));
 const http_1 = __importDefault(require("http"));
-// import fs from 'fs';
+const fs_1 = __importDefault(require("fs"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 (0, app_1.default)().then((app) => {
@@ -28,10 +28,13 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
         console.log('development');
         http_1.default.createServer(app).listen(process.env.PORT);
     }
-    // const options2 = {
-    //   key: fs.readFileSync('../client-key.pem'),
-    //   cert: fs.readFileSync('../client-cert.pem')
-    // };
-    // https.createServer(options2, app).listen(process.env.HTTPS_PORT);
+    else {
+        console.log('PRODUCTION');
+        const options2 = {
+            key: fs_1.default.readFileSync('../client-key.pem'),
+            cert: fs_1.default.readFileSync('../client-cert.pem')
+        };
+        https_1.default.createServer(options2, app).listen(process.env.HTTPS_PORT);
+    }
 });
 //# sourceMappingURL=server.js.map
