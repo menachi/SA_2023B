@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 export interface IUser {
   email: string;
   password: string;
+  imgUrl?: string;
   _id?: string;
   refreshTokens?: string[];
 }
@@ -15,6 +16,9 @@ const userSchema = new mongoose.Schema<IUser>({
   password: {
     type: String,
     required: true,
+  },
+  imgUrl: {
+    type: String,
   },
   refreshTokens: {
     type: [String],
