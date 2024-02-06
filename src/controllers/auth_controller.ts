@@ -21,7 +21,7 @@ const googleSignin = async (req: Request, res: Response) => {
                 user = await User.create(
                     {
                         'email': email,
-                        'password': '',
+                        'password': '0',
                         'imgUrl': payload?.picture
                     });
             }
